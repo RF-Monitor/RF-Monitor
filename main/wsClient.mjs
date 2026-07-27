@@ -94,6 +94,8 @@ function connect(url = WS_URL) {
     lastPongTime = Date.now();
     startHeartbeat();
 
+    socket.send(JSON.stringify({ request: 'getLatestMessages' }));
+
     if (verifyKey) {
       wsVerify();
     } else {
