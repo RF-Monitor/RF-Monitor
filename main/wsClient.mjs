@@ -159,6 +159,10 @@ function routeMessage(data) {
       sendEvent?.('event:eew:tw', content);
       break;
 
+    case 'eew_test':
+      sendEvent?.('event:eew:test', content);
+      break;
+
     case 'eew_JP':
       sendEvent?.('event:eew:jp', content);
       break;

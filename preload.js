@@ -19,6 +19,10 @@ contextBridge.exposeInMainWorld('ws', {
         console.log("[preload] sending EEWTW");
         ipcRenderer.on('event:eew:tw', (_, d) => cb(d))
     },
+    onEEWTEST: (cb) =>{
+        console.log("[preload] sending EEWTest");
+        ipcRenderer.on('event:eew:test', (_, d) => cb(d))
+    },
     onEEWJP: (cb) =>{
         console.log("[preload] sending EEWJP");
         ipcRenderer.on('event:eew:jp', (_, d) => cb(d))

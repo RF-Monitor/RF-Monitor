@@ -358,6 +358,16 @@ window.ws.onEEWJP(async (data) => {
 		EEWJPmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
 	}
 });
+window.ws.onEEWTEST(async (data) => {
+	const [enable, enableAudio, now] = await Promise.all([
+		window.config.get("enable_eew_test"),
+		window.config.get("enable_tw_eew_sound"),
+		window.time.now()
+	])
+	if(enable && (now - data.time) < 180000){
+		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data, {enableAudio});
+	}
+});
 window.eq.onEEWsim(async (data) => {
 	const [enable, enableAudio, now] = await Promise.all([
 		window.config.get("enable_eew_tw"),

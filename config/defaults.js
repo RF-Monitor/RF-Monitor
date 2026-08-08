@@ -94,6 +94,9 @@ function applyDefaults(){
     if(storage.getItem('RFPLUS_type')  === ""){
     storage.setItem('RFPLUS_type',"RFPLUS2")
     }
+    if(storage.getItem('enable_eew_test')  === ""){
+        storage.setItem('enable_eew_test',"false")
+    }
 
     if(storage.getItem('opacity')  === ""){
     storage.setItem('opacity',0.7)

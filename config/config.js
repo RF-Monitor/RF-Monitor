@@ -55,7 +55,8 @@ function getConfig(){
       tw: getBool('enable_eew_tw', true),
       jp: getBool('enable_eew_jp', true),
       rfplus: getBool('enable_RFPLUS', false),
-      rfplusType: getString('RFPLUS_type', 'RFPLUS2')
+      rfplusType: getString('RFPLUS_type', 'RFPLUS2'),
+      test: getBool('enable_eew_test', false)
     },
 
     weather: {

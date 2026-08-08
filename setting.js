@@ -167,6 +167,9 @@ if(config.eew.tw){
 if(config.eew.rfplus){
     document.getElementById("enable_RFPLUS").checked = true;
 }
+if(config.eew.test){
+    document.getElementById("enable_eew_test").checked = true;
+}
 /*
 if(config.eew.rfplusType == "RFPLUS2"){
     document.getElementById("RFPLUS_type_2").checked = true;
