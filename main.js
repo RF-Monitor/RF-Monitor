@@ -318,7 +318,7 @@ app.whenReady().then(async () => {
     }
 })
 
-/*
+
 if (app.isPackaged) {
   const electron = require('electron')
 
@@ -327,7 +327,6 @@ if (app.isPackaged) {
   menu.setApplicationMenu(null)
 
 }
-*/
 
 app.on('before-quit', () => app.quitting = true)
 
