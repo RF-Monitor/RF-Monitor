@@ -22,22 +22,46 @@ class EEWTWManager {
             alert = this.instances.get(alert.id).handleUpdate(userlat, userlon, alert, {enableAudio});
             this.onAlertUpdate?.(alert);
         }
-        
+        this.syncMapVisibility();
     }
 
     tick(now) {
+        let instanceRemoved = false;
+
         for (const [key, EEW] of this.instances) {
             EEW.updateCircleRadius(now);
+
             if (EEW.checkExpired(now)) {
-                EEW.destroy();          // 清理地圖/UI
+                EEW.destroy();
                 this.instances.delete(key);
                 this.onAlertEnd?.();
+                instanceRemoved = true;
             }
+        }
+
+        if (instanceRemoved) {
+            this.syncMapVisibility();
         }
     }
 
     hasAlert(){
         return this.instances.size > 0;
+    }
+
+    isTestAlert(alert) {
+        return alert.type === "eew-test";
+    }
+
+    // 根據是否有正式警報，決定是否顯示測試警報
+    syncMapVisibility() {
+        const hasOfficialAlert = [...this.instances.values()].some(
+            eew => !this.isTestAlert(eew.alert)
+        );
+
+        for (const eew of this.instances.values()) {
+            const shouldShow = !hasOfficialAlert || !this.isTestAlert(eew.alert);
+            eew.renderer.setVisible(shouldShow);
+        }
     }
 
 }
@@ -192,6 +216,7 @@ class EEWTWMapRenderer {
             Swave: null
         };
         this.shindoLayer = this.L.layerGroup().addTo(this.map);
+        this.visible = true;
     }
 
     initAlert(alert) {
@@ -258,6 +283,32 @@ class EEWTWMapRenderer {
 
         this.center.Pwave.setRadius(P_radius);
         this.center.Swave.setRadius(S_radius);  
+    }
+    setVisible(visible) {
+        if (this.visible === visible) return;
+
+        this.visible = visible;
+
+        const layers = [
+            this.shindoLayer,
+            this.center.icon,
+            this.center.Pwave,
+            this.center.Swave
+        ];
+
+        for (const layer of layers) {
+            if (!layer) continue;
+
+            if (visible) {
+                if (!this.map.hasLayer(layer)) {
+                    layer.addTo(this.map);
+                }
+            } else {
+                if (this.map.hasLayer(layer)) {
+                    this.map.removeLayer(layer);
+                }
+            }
+        }
     }
     end(){
         if (this.shindoLayer) {
