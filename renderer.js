@@ -22,25 +22,51 @@ window.config.onChange((data) => {
   emitConfigChange(data);
 });
 
-// 建立三個地圖
-var bounds = L.latLngBounds(L.latLng(90, 360), L.latLng(-90, -180));
-/*
-var map_shakingArea = L.map('map_shakingArea', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false,attributionControl:false,zoomDelta: 0.1 }).setView([23.7, 120.924610], 8);
-var osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-map_shakingArea.addLayer(osm);*/
-var map = L.map('mapid', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
-var osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
-var osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-map.addLayer(osm);
-var map2 = L.map('map2', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
-osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
-osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-map2.addLayer(osm);
+// 建立三個純黑地圖
 
-var map3 = L.map('map3', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
-osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
-osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-map3.addLayer(osm);
+var bounds = L.latLngBounds(L.latLng(90, 360), L.latLng(-90, -180));
+
+/*
+var map_shakingArea = L.map('map_shakingArea', {
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+    zoomControl: false,
+    attributionControl: false,
+    zoomDelta: 0.1,
+    minZoom: 3,
+    maxZoom: 16
+}).setView([23.7, 120.924610], 8);
+*/
+
+var map = L.map('mapid', {
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+    zoomControl: false,
+    attributionControl: false,
+    zoomDelta: 0.1,
+    minZoom: 3,
+    maxZoom: 16
+}).setView([23.7, 120.924610], 8);
+
+var map2 = L.map('map2', {
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+    zoomControl: false,
+    attributionControl: false,
+    zoomDelta: 0.1,
+    minZoom: 3,
+    maxZoom: 16
+}).setView([23.7, 120.924610], 8);
+
+var map3 = L.map('map3', {
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+    zoomControl: false,
+    attributionControl: false,
+    zoomDelta: 0.1,
+    minZoom: 3,
+    maxZoom: 16
+}).setView([23.7, 120.924610], 8);
 
 // 地理資料
 var town_line = {};
@@ -149,6 +175,24 @@ for (let i = 0; i < country_list.length; i++) {
 		var countyline2 = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 })]).addTo(map2);
 		var countyline3 = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 })]).addTo(map3);
 	});
+	await fetch('json/countries.geojson')
+    .then(response => response.json())
+    .then(data => {
+        [map, map2, map3].forEach(targetMap => {
+            L.geoJSON(data, {
+				filter: function (feature) {
+					return feature.properties.name !== 'Taiwan';
+				},
+                style: {
+                    color: '#808080',
+                    weight: 0.5,
+                    opacity: 0.8,
+                    fillColor: '#252525',
+                    fillOpacity: 0
+                }
+            }).addTo(targetMap);
+        });
+    });
 	
 	var weather_warning_layers = L.layerGroup().addTo(map3);
 	var typhoon_layer = L.layerGroup().addTo(map3);

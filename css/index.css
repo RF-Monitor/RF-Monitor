@@ -150,7 +150,8 @@
     width: 100%;
     position:absolute;
     top:0;
-      left:0;
+    left:0;
+    background: #252525;
 }
 .map_shakingArea{
     height: 0px;
@@ -159,7 +160,8 @@
     width: 100%;
     position:absolute;
     top:0;
-      left:0;
+    left:0;
+    background: #252525;
 }
 .footer {
     display: flex;
