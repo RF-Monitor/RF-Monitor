@@ -12,7 +12,7 @@ let broadcastEvent = null;
 let broadcastState = null;
 
 let services = {};
-const version = "3.1.1";
+const version = "3.2.0";
 
 async function checkUpdate(currentVer) {
   try {
